@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title>Learning html/template Actions</title>
+    </head>
+    <body>
+        <table>
+            <tr>
+                {{/* example how to use actions */}}
+                <td>{{"Name"}}</td>
+                <td>: {{.Name}}</td>
+
+
+                <tr>
+                    <td>Gender</td>
+                    {{$gender := .Gender}}
+                    <td style="text-transform: capitalize;">: 
+                    {{$gender}}
+
+                </tr>
+    <td>
+        <td>Hobbies</td>
+        {{range $index, $elem := .Hobbies}}
+            {{$elem}},
+        {{end}}
+    </td>
+    </td>
+    
+
+            </tr>
+
+        </table>
+    </body>
+</html>

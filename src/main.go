@@ -7,6 +7,19 @@ import (
 	"path"
 )
 
+//structing in golang
+type Info struct {
+    Affiliation string
+    Address     string
+}
+
+type Person struct {
+    Name    string
+    Gender  string
+    Hobbies []string
+    Info    Info
+}
+
 //handler welcome to localhost:9000
 func handlerwelcome (w http.ResponseWriter, r *http.Request) {
 	var filepath = path.Join("views", "index.html")
@@ -29,7 +42,7 @@ if err != nil {
 }
 }
 
-//handler for /hello
+//handler for hello
 func handlerHello(w http.ResponseWriter, r *http.Request) {
     var message = "Hello world!"
     w.Write([]byte(message))
@@ -43,10 +56,27 @@ func main() {
         http.StripPrefix("/static/",
             http.FileServer(http.Dir("assets"))))
 
+///handle function router /action. untuk menampilkan struct dari golang
+	 http.HandleFunc("/action", func(w http.ResponseWriter, r *http.Request) {
+        var person = Person{
+            Name:    "Bruce Wayne",
+            Gender:  "male",
+            Hobbies: []string{"Reading Books", "Traveling", "Buying things"},
+            Info:    Info{"Wayne Enterprises", "Gotham City"},
+        }
+
+var tmpl = template.Must(template.ParseFiles(path.Join("views", "view.html")))
+        if err := tmpl.Execute(w, person); err != nil {
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+        })
+	
+
     var address = "localhost:9000"
-    fmt.Printf("server started at %s\n", address)
+    fmt.Printf("server started at %s ....... \n", address)
     err := http.ListenAndServe(address, nil)
     if err != nil {
         fmt.Println(err.Error())
     }
+	
 }
